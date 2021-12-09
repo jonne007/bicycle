@@ -7,6 +7,7 @@ import java.time.Clock
 import shared.Protocol
 import castor.SimpleActor
 import cask.endpoints.WsChannelActor
+import backend._
 
 class WebServer() {}
 object WebServer extends cask.Main {
@@ -20,7 +21,30 @@ object WebServer extends cask.Main {
 
 case class WebPageRoutes()(implicit cc: castor.Context, log: cask.Logger)
     extends cask.Routes {
+val bb = new InMemoryBicycleBackend
+  
+  @cask.get("/cycles")
+  def list() = {
+    val lista = bb.list()
+    val cycles = upickle.default.writeJs(lista)
+    ujson.Obj("cycles" -> cycles )
+  }
 
+  @cask.postJson("/cycles")
+  def addBicycle(brand: ujson.Value, price: ujson.Value, stock: ujson.Value) = {
+    val b = Bicycle(brand.str, price.num, stock.num.toInt)
+    val id = bb.addBicycle(b)
+    ujson.Obj("bicycleId" -> id)
+  }
+
+  @cask.postJson("/cycles/:bid/updateBrand")
+  def update(bid: String, brand: ujson.Value) = {
+    val b = bb.get(bid).get
+    val updatedB = b.copy(brand = brand.str)
+    bb.update(bid, updatedB)
+    ujson.Obj("updated" -> true)
+  }    
+  
   // hack to make cask serve the index.html page if browser requests subfolder /htm/about
   // fix this properly in nginx reverse proxy
   @cask.get("/htm", subpath = true)
