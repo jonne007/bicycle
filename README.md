@@ -18,5 +18,7 @@ Cask file serving has a nasty [hack](server/src/Server.scala) to be able to serv
 
 
 
-create, update and brand 
+create, update and get
+
+mill -w server.test backend.BicycleSuite    
 

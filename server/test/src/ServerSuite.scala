@@ -42,9 +42,7 @@ object ServerSuite extends TestSuite {
       val r = requests.get(host + s"/cycles/$bid")
       val bicycleJson = ujson.read(r.text())
 
-      
-
-       bicycleJson(0)("stock").num ==> 12
+      bicycleJson(0)("stock").num ==> 12
     }
   }
 

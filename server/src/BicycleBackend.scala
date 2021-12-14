@@ -3,10 +3,12 @@ package backend
 import java.util.UUID
 import upickle.default.{ReadWriter => RW, macroRW}
 
-case class Bicycle(brand: String, price: Double, stock: Int)
+case class Bicycle(Id: BicycleId, brand: String, price: Double, stock: Int)
 object Bicycle {
   implicit val rw: RW[Bicycle] = macroRW
 }
+
+type BicycleId = String
 
 trait BicycleBackend {
 
