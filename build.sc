@@ -3,6 +3,7 @@ import mill.scalalib._
 import mill.scalajslib._
 import mill.define.TaskModule
 
+val requestsVersion = "0.6.9"
 val utestVersion = "0.7.10"
 val upickle = "1.4.2"
 val sv = "3.0.2"
@@ -18,7 +19,8 @@ trait Common extends ScalaModule {
 
 object server extends Common {
   def ivyDeps = super.ivyDeps() ++ Agg(
-    ivy"com.lihaoyi::cask:0.8.0"
+    ivy"com.lihaoyi::cask:0.8.0",
+    ivy"com.lihaoyi::requests:$requestsVersion"
   )
   override def sources = T.sources {
     super.sources() ++ vuegui.sources()
@@ -33,6 +35,14 @@ object server extends Common {
       vuegui.npmRunBuild.apply()
       super.compile.apply()
     }
+    object test extends Tests {
+    def testFramework = "utest.runner.Framework"
+
+    def ivyDeps =
+      Agg(
+        ivy"com.lihaoyi::utest::$utestVersion"
+      )
+  }
 }
 
 object vuegui extends Module with TaskModule {

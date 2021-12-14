@@ -51,12 +51,14 @@ class InMemoryBicycleBackend extends BicycleBackend {
 
   def searchByBrandnPrice(p: Double, b: String): List[Bicycle] = {
     val cycles2 = list().filter(c => c.price <= p)
-    cycles2.filter(c => c.brand
-    .toLowerCase()
-    .contains(b.toLowerCase()))
+    cycles2.filter(c =>
+      c.brand
+        .toLowerCase()
+        .contains(b.toLowerCase())
+    )
 
   }
-    def buy(b: String, amount: Int): Double = {
+  def buy(b: String, amount: Int): Double = {
 
     val c = get(b).get
     val newAmount = c.stock - amount

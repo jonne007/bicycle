@@ -3,7 +3,7 @@ import utest._
 
 object ServerSuite extends TestSuite {
   val tests = Tests {
-    test("list") - withServer(Server) { host =>
+    test("list") - withServer(WebServer) { host =>
       val r = requests.get(host + "/cycles")
       val json = ujson.read(r.text())
 
@@ -11,7 +11,7 @@ object ServerSuite extends TestSuite {
 
       cycles.size ==> 0
     }
-    test("add and list") - withServer(Server) { host =>
+    test("add and list") - withServer(WebServer) { host =>
       val createResponse =
         requests.post(
           url = host + "/cycles",
@@ -19,7 +19,7 @@ object ServerSuite extends TestSuite {
         )
 
       val json = ujson.read(createResponse.text())
-      val id = json("id").str
+      val id = json("bicycleId").str
 
       val r = requests.get(host + "/cycles")
       val json2 = ujson.read(r.text())
@@ -29,22 +29,22 @@ object ServerSuite extends TestSuite {
       trainings.size ==> 1
     }
 
-    test("update") - withServer(Server) { host =>
+    test("create and get") - withServer(WebServer) { host =>
       val createResponse =
         requests.post(
           url = host + "/cycles",
-          data = """{"brand": "cresent"}"""
+          data = """{"brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
-      val id = json("id").str
+      val bid = json("bicycleId").str
 
-      val r = requests.get(host + "/cycles")
-      val json2 = ujson.read(r.text())
+      val r = requests.get(host + s"/cycles/$bid")
+      val bicycleJson = ujson.read(r.text())
 
-      val trainings = json2("cycles").arr
+      
 
-      trainings.size ==> 1
+       bicycleJson(0)("stock").num ==> 12
     }
   }
 

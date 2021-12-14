@@ -21,13 +21,13 @@ object WebServer extends cask.Main {
 
 case class WebPageRoutes()(implicit cc: castor.Context, log: cask.Logger)
     extends cask.Routes {
-val bb = new InMemoryBicycleBackend
-  
+  val bb = new InMemoryBicycleBackend
+
   @cask.get("/cycles")
   def list() = {
     val lista = bb.list()
     val cycles = upickle.default.writeJs(lista)
-    ujson.Obj("cycles" -> cycles )
+    ujson.Obj("cycles" -> cycles)
   }
 
   @cask.postJson("/cycles")
@@ -43,9 +43,15 @@ val bb = new InMemoryBicycleBackend
     val updatedB = b.copy(brand = brand.str)
     bb.update(bid, updatedB)
     ujson.Obj("updated" -> true)
-  }    
-  
-  @cask.get("/cycles/:bid/searchByBrand")
+  }
+
+  @cask.getJson("/cycles/:bid")
+  def get(bid: String) = {
+    val b = bb.get(bid)
+    upickle.default.writeJs(b)
+  }
+
+ /*  @cask.get("/cycles/:bid/searchByBrand")
   def searchByBrand(bid: String) = {
     val lista = bb.list()
     val listByBrand = lista.filter(b =>
@@ -66,8 +72,8 @@ val bb = new InMemoryBicycleBackend
     ujson.Obj("price" -> maxPriceList)
   }
 
-  @cask.get("/cycles/:bid/searchByPricenBrand")
-  def searchByPricenBrand(bid: String, p: Double) = {
+  @cask.get("/cycles/searchByPricenBrand")
+  def searchByPricenBrand(p: Double) = {
     val lista = bb.list()
     val listaByBrand = lista.filter(b =>
       b.brand.toLowerCase
@@ -77,17 +83,7 @@ val bb = new InMemoryBicycleBackend
     val byBrandnPriceList = upickle.default.writeJs(byBrandnPrice)
 
     ujson.Obj("brandnprice" -> byBrandnPriceList)
-  }
-
-  @cask.postJson("/cycles/")
-  def delete(brand: ujson.Value, price: ujson.Value, stock: ujson.Value) = {
-    val b = Bicycle(brand.str, price.num, stock.num.toInt)
-    val marke = b.brand
-    val remove = bb.delete(marke)
-    val removed = upickle.default.writeJs(remove)
-
-    ujson.Obj("removed" -> removed)
-  }
+  } */
 
   // hack to make cask serve the index.html page if browser requests subfolder /htm/about
   // fix this properly in nginx reverse proxy
@@ -96,7 +92,7 @@ val bb = new InMemoryBicycleBackend
     val filePath: String =
       if request.remainingPathSegments.isEmpty ||
         (!request.remainingPathSegments.last.endsWith(".js") &&
-        !request.remainingPathSegments.last.endsWith(".js.map"))
+          !request.remainingPathSegments.last.endsWith(".js.map"))
       then "./vuegui/dist/index.html"
       else "./vuegui/dist/" + request.remainingPathSegments.mkString("/")
       end if

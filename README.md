@@ -14,3 +14,9 @@ Set up for development, use: `mill -w server.runBackground`
 `http://localhost:8384/htm/`
 
 Cask file serving has a nasty [hack](server/src/Server.scala) to be able to serve a default page required by vuejs routing. This would be handled by reverseproxy (eg nginx) in production scenario.
+
+
+
+
+create, update and brand 
+
