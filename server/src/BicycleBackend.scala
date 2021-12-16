@@ -3,7 +3,7 @@ package backend
 import java.util.UUID
 import upickle.default.{ReadWriter => RW, macroRW}
 
-case class Bicycle(Id: BicycleId, brand: String, price: Double, stock: Int)
+case class Bicycle(id: BicycleId, brand: String, price: Double, stock: Int)
 object Bicycle {
   implicit val rw: RW[Bicycle] = macroRW
 }
@@ -13,63 +13,63 @@ type BicycleId = String
 trait BicycleBackend {
 
   def createID() = UUID.randomUUID.toString()
-  def get(b: String): Option[Bicycle]
-  def addBicycle(b: Bicycle): String
+  def get(id: String): Option[Bicycle]
+  def addBicycle(b: Bicycle): BicycleId
   def list(): List[Bicycle]
-  def update(id: String, b: Bicycle): Unit
-  def searchByBrand(b: String): List[Bicycle]
-  def searchByMaxPrice(p: Double): List[Bicycle]
-  def searchByBrandnPrice(p: Double, b: String): List[Bicycle]
-  def buy(b: String, amount: Int): Double
-  def delete(b: String): Unit
+  def update(bid: BicycleId, b: Bicycle): Unit
+  def searchByBrand(brand: String): List[Bicycle]
+  def searchByMaxPrice(price: Double): List[Bicycle]
+  def searchByBrandnPrice(price: Double, brand: String): List[Bicycle]
+  def buy(bid: BicycleId, amount: Int): Double
+  def delete(bid: BicycleId): Unit
 }
 class InMemoryBicycleBackend extends BicycleBackend {
   var cycles: Map[String, Bicycle] = Map.empty
 
-  def get(id: String): Option[Bicycle] = {
-    cycles.get(id)
+  def get(bid: BicycleId): Option[Bicycle] = {
+    cycles.get(bid)
   }
-  def addBicycle(b: Bicycle): String = {
-    val id = createID()
-    cycles = cycles + (id -> b)
-    id
+  def addBicycle(b: Bicycle): BicycleId = {
+    val bid = createID()
+    cycles = cycles + (bid -> b.copy(id = bid))
+    bid
 
   }
   def list(): List[Bicycle] = cycles.values.toList
-  def update(id: String, b: Bicycle): Unit = {
-    cycles = cycles + (id -> b)
+  def update(bid: BicycleId, b: Bicycle): Unit = {
+    cycles = cycles + (bid -> b)
 
   }
-  def searchByBrand(b: String): List[Bicycle] = search { c =>
+  def searchByBrand(brand: String): List[Bicycle] = search { c =>
     c.brand
       .toLowerCase()
-      .contains(b.toLowerCase())
+      .contains(brand.toLowerCase())
 
   }
-  def searchByMaxPrice(p: Double): List[Bicycle] = {
-    search(c => c.price <= p)
+  def searchByMaxPrice(price: Double): List[Bicycle] = {
+    search(c => c.price <= price)
 
   }
 
-  def searchByBrandnPrice(p: Double, b: String): List[Bicycle] = {
-    val cycles2 = list().filter(c => c.price <= p)
+  def searchByBrandnPrice(price: Double, brand: String): List[Bicycle] = {
+    val cycles2 = list().filter(c => c.price <= price)
     cycles2.filter(c =>
       c.brand
         .toLowerCase()
-        .contains(b.toLowerCase())
+        .contains(brand.toLowerCase())
     )
 
   }
-  def buy(b: String, amount: Int): Double = {
+  def buy(bid: BicycleId, amount: Int): Double = {
 
-    val c = get(b).get
+    val c = get(bid).get
     val newAmount = c.stock - amount
-    update(b, c.copy(stock = newAmount))
+    update(bid, c.copy(stock = newAmount))
     c.price * amount
 
   }
-  def delete(b: String): Unit = {
-    val bc1 = cycles.removed(b)
+  def delete(bid: BicycleId): Unit = {
+    val bc1 = cycles.removed(bid)
     cycles = bc1
   }
 

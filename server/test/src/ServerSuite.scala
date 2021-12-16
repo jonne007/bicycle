@@ -15,7 +15,7 @@ object ServerSuite extends TestSuite {
       val createResponse =
         requests.post(
           url = host + "/cycles",
-          data = """{"brand": "cresent", "price": 25, "stock": 12}"""
+          data = """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
@@ -33,7 +33,7 @@ object ServerSuite extends TestSuite {
       val createResponse =
         requests.post(
           url = host + "/cycles",
-          data = """{"brand": "cresent", "price": 25, "stock": 12}"""
+          data = """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
