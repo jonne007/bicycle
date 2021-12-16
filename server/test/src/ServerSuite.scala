@@ -44,6 +44,35 @@ object ServerSuite extends TestSuite {
 
       bicycleJson(0)("stock").num ==> 12
     }
+
+    test("create, get and update") - withServer(WebServer) { host =>
+      val createResponse =
+        requests.post(
+          url = host + "/cycles",
+          data =
+            """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
+        )
+
+      val json = ujson.read(createResponse.text())
+      val bid = json("bicycleId").str
+
+      val updateResponse =
+        requests.post(
+          url = host + s"/cycles/$bid/updateBrand",
+          data = """{"brand": "monark"}"""
+        )
+
+      val updateJson = ujson.read(updateResponse.text())
+      val updatedBrand = updateJson("updated")
+
+      val getResponse = requests.get(host + s"/cycles/$bid")
+      val bicycleJson = ujson.read(getResponse.text())
+
+      val brand = bicycleJson(0)("brand").str
+
+      brand ==> "monark"
+
+    }
   }
 
   def withServer[T](m: cask.main.Main)(f: String => T): T = {
