@@ -13,7 +13,7 @@ type BicycleId = String
 trait BicycleBackend {
 
   def createID() = UUID.randomUUID.toString()
-  def get(id: String): Option[Bicycle]
+  def get(bid: BicycleId): Option[Bicycle]
   def addBicycle(b: Bicycle): BicycleId
   def list(): List[Bicycle]
   def update(bid: BicycleId, b: Bicycle): Unit
