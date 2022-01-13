@@ -53,3 +53,10 @@ kör tutorial vue nuxtJS -- https://nuxtjs.org/tutorials/creating-a-nuxt-module 
 vuejs.org = matnyttigt junk!!!
 
 http://localhost:8384/htm/
+
+- använd datat från textfälten när du skapar ny cyckel
+- cykel
+- Lägg till ett X i sluttet på varje rad som gör delete.
+- gör så att listan laddas när man kommer in på sidan direkt
+- lägg till lite testdata i backend så det finns när man ska test
+- uppdatera litstan när man skapar en ny

@@ -24,9 +24,9 @@ object ServerSuite extends TestSuite {
       val r = requests.get(host + "/cycles")
       val json2 = ujson.read(r.text())
 
-      val trainings = json2("cycles").arr
+      val bicycles = json2("cycles").arr
 
-      trainings.size ==> 1
+      bicycles.size ==> 1
     }
 
     test("create and get") - withServer(WebServer) { host =>
