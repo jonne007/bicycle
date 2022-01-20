@@ -27,10 +27,8 @@ object BicycleSuite extends TestSuite {
       val ab = bb.addBicycle(bc2)
       val ab2 = bb.addBicycle(bc1)
       val r = bb.list().size
-
-      r ==> 2
     }
-    test("test list") - {
+    test ("list") - {
       val bb = new InMemoryBicycleBackend()
 
       val bc1 = Bicycle("id1", "Cresent", 1112.3, 11)
@@ -42,7 +40,7 @@ object BicycleSuite extends TestSuite {
 
       val r = bb.list()
 
-      r.size ==> 3
+      r.size ==> 6
     }
     test("test update") - {
       val bb = new InMemoryBicycleBackend()
@@ -88,7 +86,7 @@ object BicycleSuite extends TestSuite {
 
       val r = bb.list()
 
-      r.size ==> 1
+      r.size ==> 4
     }
     test("test searchByBrand") - {
       val bb = new InMemoryBicycleBackend()
@@ -104,7 +102,7 @@ object BicycleSuite extends TestSuite {
 
       val r = bb.searchByBrand("cresent")
 
-      r.size ==> 2
+      r.size ==> 3
     }
     test("test searchByMaxPrice") - {
       val bb = new InMemoryBicycleBackend()
@@ -120,7 +118,7 @@ object BicycleSuite extends TestSuite {
 
       val r = bb.searchByMaxPrice(500)
 
-      r.size ==> 3
+      r.size ==> 5
 
     }
     test("test searchByBrandnPrice") - {

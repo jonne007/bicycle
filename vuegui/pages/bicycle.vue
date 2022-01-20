@@ -1,14 +1,15 @@
 <template lang="jade">
 <div>
+<div><Nav></div>
   <div>
   <ul id="array-rendering">
     <li v-for="c in cycles">
-      {{ c.id }} - {{c.brand}} - {{c.price}} - {{c.stock}} - x // <---Länk för en delete
+      {{ c.id }} - {{c.brand}} - {{c.price}} - {{c.stock}} - <span @click= "deleteBicycle(c.id)"> x </span> 
     </li>
   </ul>
   </div>
-  <div><button @click="fetchBicycle">HämtaLista</button></div>
-  <div><button @click="createBicycle('cresent')">Skapa</button></div>
+  <input v-model="brand" placeholder="enter brand">
+  <div><button @click="createBicycle()">Skapa</button></div>
 </div>
 </template>
 
@@ -17,23 +18,31 @@ export default {
   data() {
     return {
       cycles: [],
+      brand: "",
     };
   },
   methods: {
+    deleteBicycle: function (bid) {
+      this.$axios
+      .delete("/cycles/" + bid)
+    },
     fetchBicycle: function () {
       this.$axios
         .get("/cycles")
         .then((response) => (this.cycles = response.data.cycles));
     },
-    createBicycle: function (brand) {
+    createBicycle: function () {
       this.$axios
         .post("/cycles", {
-          id: "bid2",
-          brand: brand,
+          brand: this.brand,
           price: 150,
-          stock: 20
-        });
+          stock: 20,
+        })
+        .then((response) => this.fetchBicycle());
     },
+  },
+  created: function () {
+    this.fetchBicycle();
   },
 };
 </script>

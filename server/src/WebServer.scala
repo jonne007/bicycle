@@ -32,12 +32,11 @@ case class WebPageRoutes()(implicit cc: castor.Context, log: cask.Logger)
 
   @cask.postJson("/cycles")
   def addBicycle(
-      id: ujson.Value,
       brand: ujson.Value,
       price: ujson.Value,
       stock: ujson.Value
   ) = {
-    val b = Bicycle(id.str, brand.str, price.num, stock.num.toInt)
+    val b = Bicycle("", brand.str, price.num, stock.num.toInt)
     val bid = bb.addBicycle(b)
     ujson.Obj("bicycleId" -> bid)
   }
@@ -54,6 +53,12 @@ case class WebPageRoutes()(implicit cc: castor.Context, log: cask.Logger)
   def get(bid: String) = {
     val b = bb.get(bid)
     upickle.default.writeJs(b)
+  }
+
+  @cask.delete("/cycles/:bid")
+  def delete(bid: String) = {
+    bb.delete(bid)
+    ujson.Obj("deleted" -> true)
   }
 
   /*  @cask.get("/cycles/:bid/searchByBrand")

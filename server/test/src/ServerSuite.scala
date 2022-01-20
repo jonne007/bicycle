@@ -9,13 +9,13 @@ object ServerSuite extends TestSuite {
 
       val cycles = json("cycles").arr
 
-      cycles.size ==> 0
+      cycles.size ==> 3
     }
     test("add and list") - withServer(WebServer) { host =>
       val createResponse =
         requests.post(
           url = host + "/cycles",
-          data = """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
+          data = """{"brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
@@ -26,14 +26,14 @@ object ServerSuite extends TestSuite {
 
       val bicycles = json2("cycles").arr
 
-      bicycles.size ==> 1
+      bicycles.size ==> 4
     }
 
     test("create and get") - withServer(WebServer) { host =>
       val createResponse =
         requests.post(
           url = host + "/cycles",
-          data = """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
+          data = """{"brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
@@ -50,7 +50,7 @@ object ServerSuite extends TestSuite {
         requests.post(
           url = host + "/cycles",
           data =
-            """{"id": "id1", "brand": "cresent", "price": 25, "stock": 12}"""
+            """{"brand": "cresent", "price": 25, "stock": 12}"""
         )
 
       val json = ujson.read(createResponse.text())
@@ -71,6 +71,32 @@ object ServerSuite extends TestSuite {
       val brand = bicycleJson(0)("brand").str
 
       brand ==> "monark"
+
+    }
+    test("delete") - withServer(WebServer) { host =>
+      val createResponse =
+        requests.post(
+          url = host + "/cycles",
+          data =
+            """{"brand": "cresent", "price": 25, "stock": 12}"""
+        )
+
+      val json = ujson.read(createResponse.text())
+      val bid = json("bicycleId").str
+
+      val deleteResponse =
+        requests.delete(
+          url = host + s"/cycles/$bid",
+          
+        )
+
+      val updateJson = ujson.read(deleteResponse.text())
+      val deletedJson = updateJson("deleted").bool
+     
+      
+
+      
+      deletedJson ==> true
 
     }
   }

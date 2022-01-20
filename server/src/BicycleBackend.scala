@@ -25,6 +25,9 @@ trait BicycleBackend {
 }
 class InMemoryBicycleBackend extends BicycleBackend {
   var cycles: Map[String, Bicycle] = Map.empty
+  cycles = cycles + ("bid1" -> Bicycle("bid1", "monark", 22.2, 12))
+  cycles = cycles + ("bid2" -> Bicycle("bid2", "jofa", 221.2, 122))
+  cycles = cycles + ("bid3" -> Bicycle("bid3", "cresent", 2222.2, 112))
 
   def get(bid: BicycleId): Option[Bicycle] = {
     cycles.get(bid)
