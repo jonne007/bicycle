@@ -60,3 +60,12 @@ http://localhost:8384/htm/
 - gör så att listan laddas när man kommer in på sidan direkt
 - lägg till lite testdata i backend så det finns när man ska test
 - uppdatera listan när man skapar en ny
+- Gör klart formulär med alla fält
+- Se till att textfält rensas när man skapat en ny
+- fixa validering för alla fält (price och stock inom rimliga mått)
+- label till textfälten plus lite style?
+- ta sig till nästa vy, row click handler. click till ny 
+- this.$router.push({
+        path: "/edit/" + record.id,
+      });
+- ny katalog      
