@@ -8,7 +8,7 @@
   <ul id="array-rendering">
     <li v-for="c in cycles">
       {{ c.id }} - {{c.brand}} - {{c.price}} - {{c.stock}} - <span @click= "deleteBicycle(c.id)"> xxx </span>
-      <span @click= "edit(id)"> Edit </span>
+      <span @click= "edit(c.id)"> Edit </span>
     </li>
   </ul>
   </div>
