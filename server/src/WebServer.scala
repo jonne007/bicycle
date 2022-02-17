@@ -42,10 +42,16 @@ case class WebPageRoutes()(implicit cc: castor.Context, log: cask.Logger)
   }
 
   @cask.postJson("/cycles/:bid/updateBrand")
-  def update(bid: String, brand: ujson.Value) = {
+  def updateBrand(bid: String, brand: ujson.Value) = {
     val b = bb.get(bid).get
     val updatedB = b.copy(brand = brand.str)
     bb.update(bid, updatedB)
+    ujson.Obj("updated" -> true)
+  }
+  @cask.postJson("/cycles/:bid/update")
+  def update(bid: String, brand: ujson.Value, price: ujson.Value, stock: ujson.Value) = {
+    val b = Bicycle(bid, brand.str, price.num, stock.num.toInt)
+    bb.update(bid, b)
     ujson.Obj("updated" -> true)
   }
 

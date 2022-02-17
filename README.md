@@ -69,3 +69,6 @@ http://localhost:8384/htm/
         path: "/edit/" + record.id,
       });
 - ny katalog      
+
+kika på styla. fixa allt.
+filtrera lista. textfält input.

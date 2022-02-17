@@ -55,7 +55,7 @@ export default {
   methods: {
     edit(id) {
       this.$router.push({
-        path: "/edit/" ,
+        path: "/edit/" + id ,
       });
     },  
     clearFields: function () { 
@@ -94,7 +94,8 @@ export default {
 };
 </script>
 
-  <style> 
+  <style>
+  
   body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
